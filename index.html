@@ -3,61 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Math_3_41 — Ruffle</title>
+  <title>Ruffle SWF Player</title>
 
-  <!-- Ruffle: ενημερώνεται αυτόματα από το CDN -->
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #ffffff;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
+      background: #fff;
+      overflow: hidden;
     }
 
-    .wrap {
-      width: min(100%, 800px);
-      margin: 0 auto;
-    }
-
-    #player {
-      width: 100%;
-      aspect-ratio: 800 / 935;
-      display: block;
+    #player-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     ruffle-player {
       width: 100%;
       height: 100%;
-      display: block;
+    }
+
+    #message {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div id="player"></div>
-  </div>
+  <div id="player-container"></div>
 
   <script>
     window.addEventListener("load", () => {
+      const params = new URLSearchParams(window.location.search);
+      let swf = params.get("swf") || "Math_3_41.swf";
+
+      // Ασφάλεια: δεχόμαστε μόνο όνομα αρχείου SWF από τον ίδιο φάκελο.
+      swf = swf.split("/").pop().split("\\").pop();
+
+      const container = document.getElementById("player-container");
+
+      if (!swf.toLowerCase().endsWith(".swf")) {
+        container.innerHTML =
+          '<div id="message">Μη έγκυρο αρχείο SWF.</div>';
+        return;
+      }
+
       const ruffle = window.RufflePlayer.newest();
       const player = ruffle.createPlayer();
 
-      player.style.width = "100%";
-      player.style.height = "100%";
-
-      document.getElementById("player").appendChild(player);
+      container.appendChild(player);
 
       player.load({
-        url: "Math_3_41.swf",
+        url: "./" + swf,
         autoplay: "on",
         unmuteOverlay: "hidden",
         backgroundColor: "#FFFFFF",
         scale: "showAll",
         quality: "high"
+      }).catch((error) => {
+        console.error(error);
+        container.innerHTML =
+          '<div id="message">Δεν ήταν δυνατό να φορτωθεί το αρχείο <strong>' +
+          swf.replace(/[&<>"']/g, "") +
+          '</strong>.<br>Έλεγξε ότι το όνομα στη διεύθυνση είναι ακριβώς ίδιο με το όνομα του αρχείου στο GitHub.</div>';
       });
     });
   </script>
