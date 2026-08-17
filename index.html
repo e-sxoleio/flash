@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math_3_41 — Ruffle</title>
+
+  <!-- Ruffle: ενημερώνεται αυτόματα από το CDN -->
+  <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    .wrap {
+      width: min(100%, 800px);
+      margin: 0 auto;
+    }
+
+    #player {
+      width: 100%;
+      aspect-ratio: 800 / 935;
+      display: block;
+    }
+
+    ruffle-player {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div id="player"></div>
+  </div>
+
+  <script>
+    window.addEventListener("load", () => {
+      const ruffle = window.RufflePlayer.newest();
+      const player = ruffle.createPlayer();
+
+      player.style.width = "100%";
+      player.style.height = "100%";
+
+      document.getElementById("player").appendChild(player);
+
+      player.load({
+        url: "Math_3_41.swf",
+        autoplay: "on",
+        unmuteOverlay: "hidden",
+        backgroundColor: "#FFFFFF",
+        scale: "showAll",
+        quality: "high"
+      });
+    });
+  </script>
+</body>
+</html>
